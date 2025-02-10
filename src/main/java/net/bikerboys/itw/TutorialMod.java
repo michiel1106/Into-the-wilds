@@ -48,7 +48,7 @@ public class TutorialMod
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.TEST_ITEM);
+            event.accept(ModItems.TEST_HELMET);
         }
     }
 
