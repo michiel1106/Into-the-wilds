@@ -22,7 +22,7 @@ public enum ModMaterial implements StringRepresentable, ArmorMaterial {
         p_266652_.put(ArmorItem.Type.LEGGINGS, 2);
         p_266652_.put(ArmorItem.Type.CHESTPLATE, 3);
         p_266652_.put(ArmorItem.Type.HELMET, 1);
-    }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> {
+    }), 15, SoundEvents.BLAZE_HURT, 0.0F, 0.0F, () -> {
         return Ingredient.of(Items.DIRT);
     });
 

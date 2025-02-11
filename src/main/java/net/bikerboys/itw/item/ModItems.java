@@ -24,6 +24,8 @@ public class ModItems {
     public static final RegistryObject<Item> TEST_CHESTPLATE = ITEMS.register("red_chestplate", () -> new DyeableArmorItem(ModMaterial.LEATHERS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> TEST_LEGGINGS = ITEMS.register("red_leggings", () -> new DyeableArmorItem(ModMaterial.LEATHERS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> TEST_BOOTS = ITEMS.register("red_boots", () -> new DyeableArmorItem(ModMaterial.LEATHERS, ArmorItem.Type.BOOTS, new Item.Properties()));
+
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
