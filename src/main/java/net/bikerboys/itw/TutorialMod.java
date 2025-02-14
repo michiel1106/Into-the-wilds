@@ -5,9 +5,11 @@ import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
 import net.bikerboys.itw.item.ModItems;
 import net.bikerboys.itw.screen.ModMenuTypes;
+import net.bikerboys.itw.screen.SewingStationMenu;
 import net.bikerboys.itw.screen.SewingStationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -86,8 +88,11 @@ public class TutorialMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-
-            MenuScreens.register(ModMenuTypes.SEWING_STATION_MENU.get(), SewingStationScreen::new);
+            MenuScreens.register(
+                    (MenuType<SewingStationMenu>)(MenuType<?>) ModMenuTypes.SEWING_STATION_MENU.get(),
+                    SewingStationScreen::new
+            );
+           // MenuScreens.register(ModMenuTypes.SEWING_STATION_MENU.get(), SewingStationScreen::new);
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

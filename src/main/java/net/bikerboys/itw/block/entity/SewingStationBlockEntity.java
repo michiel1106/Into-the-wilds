@@ -13,6 +13,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -37,6 +39,13 @@ public class SewingStationBlockEntity extends BlockEntity implements MenuProvide
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 78;
+
+    private final ContainerData datas = new SimpleContainerData(2);
+
+    public ContainerData getContainerData() {
+        return datas;
+    }
+
 
     public SewingStationBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.SEWING_STATION_BE.get(), pPos, pBlockState);
@@ -103,8 +112,18 @@ public class SewingStationBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-         return new SewingStationMenu(pContainerId, pPlayerInventory, this, this.data);
+        Level level = pPlayer.level();
+        BlockPos pos = this.getBlockPos(); // Ensure you have a method to get the block's position
+        SewingStationBlockEntity blockEntity = (SewingStationBlockEntity) level.getBlockEntity(pos);
+        ContainerLevelAccess access = ContainerLevelAccess.create(level, pos);
+
+        if (blockEntity == null) {
+            throw new IllegalStateException("Block entity is null at " + pos);
+        }
+
+        return new SewingStationMenu(pContainerId, pPlayerInventory, access);
     }
+
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
