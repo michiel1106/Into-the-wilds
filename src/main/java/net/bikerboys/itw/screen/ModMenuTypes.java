@@ -1,6 +1,8 @@
 package net.bikerboys.itw.screen;
 
 import net.bikerboys.itw.TutorialMod;
+import net.bikerboys.itw.screen.custom.SewingStationMenu;
+import net.bikerboys.itw.screen.secondone.SecondSewingStationMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -14,6 +16,7 @@ public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, TutorialMod.MOD_ID);
 
     public static final RegistryObject<MenuType<AbstractContainerMenu>> SEWING_STATION_MENU = register("sewing_station", SewingStationMenu::new);
+    public static final RegistryObject<MenuType<AbstractContainerMenu>> SECOND_SEWING_STATION_MENU = register("second_sewing_station", SecondSewingStationMenu::new);
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));

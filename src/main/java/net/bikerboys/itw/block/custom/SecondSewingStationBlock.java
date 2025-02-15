@@ -1,7 +1,6 @@
 package net.bikerboys.itw.block.custom;
 
-import net.bikerboys.itw.block.entity.SewingStationBlockEntity;
-import net.bikerboys.itw.screen.custom.SewingStationMenu;
+import net.bikerboys.itw.screen.secondone.SecondSewingStationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
@@ -15,19 +14,18 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SewingStationBlock extends Block {
+public class SecondSewingStationBlock extends Block {
     public static final VoxelShape SHAPE = Block.box(0,0,0, 16, 16, 16);
 
-    public SewingStationBlock(Properties pProperties) {
+    public SecondSewingStationBlock(Properties pProperties) {
         super(pProperties);
     }
-    private static final Component CONTAINER_TITLE = Component.translatable("container.sewing_station");
+    private static final Component CONTAINER_TITLE = Component.translatable("container.second_sewing_station");
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -41,12 +39,7 @@ public class SewingStationBlock extends Block {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
-        if (pState.getBlock() != pNewState.getBlock()) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SewingStationBlockEntity) {
-                ((SewingStationBlockEntity) blockEntity).drops();
-            }
-        }
+
 
 
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
@@ -80,7 +73,7 @@ public class SewingStationBlock extends Block {
 
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider((id, inventory, player) ->
-                new SewingStationMenu(id, inventory, ContainerLevelAccess.create(level, pos)),
+                new SecondSewingStationMenu(id, inventory, ContainerLevelAccess.create(level, pos)),
                 Component.translatable("container.sewing_station"));
     }
 

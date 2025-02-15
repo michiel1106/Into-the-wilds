@@ -1,6 +1,7 @@
 package net.bikerboys.itw.block;
 
 import net.bikerboys.itw.TutorialMod;
+import net.bikerboys.itw.block.custom.SecondSewingStationBlock;
 import net.bikerboys.itw.block.custom.SewingStationBlock;
 import net.bikerboys.itw.item.ModItems;
 import net.minecraft.world.item.BlockItem;
@@ -26,6 +27,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SEWING_STATION = registerBlock("sewing_station",
             () -> new SewingStationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Block> SECOND_SEWING_STATION = registerBlock("second_sewing_station",
+            () -> new SecondSewingStationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

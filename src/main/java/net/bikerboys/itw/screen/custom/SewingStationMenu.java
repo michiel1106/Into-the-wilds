@@ -1,9 +1,10 @@
-package net.bikerboys.itw.screen;
+package net.bikerboys.itw.screen.custom;
 
 import com.google.common.collect.Lists;
 import net.bikerboys.itw.TutorialMod;
 import net.bikerboys.itw.recipes.ModRecipes;
 import net.bikerboys.itw.recipes.SewingRecipe;
+import net.bikerboys.itw.screen.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-
 public class SewingStationMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
 
@@ -54,6 +54,7 @@ public class SewingStationMenu extends AbstractContainerMenu {
 
     public SewingStationMenu(int pContainerId, Inventory pPlayerInventory, final ContainerLevelAccess pAccess) {
         super(ModMenuTypes.SEWING_STATION_MENU.get(), pContainerId);
+
         this.access = pAccess;
         this.level = pPlayerInventory.player.level();
 
@@ -160,28 +161,38 @@ public class SewingStationMenu extends AbstractContainerMenu {
         }
     }
 
+
     private void setupRecipeList(Container pContainer, ItemStack stack1, ItemStack stack2) {
         this.recipes.clear();
         this.selectedRecipeIndex.set(-1);
         this.resultSlot.set(ItemStack.EMPTY);
 
         if (!stack1.isEmpty() && !stack2.isEmpty()) {
-            this.recipes = this.level.getRecipeManager().getRecipesFor(ModRecipes.SEWING_TYPE.get(), pContainer, this.level);
-            TutorialMod.LOGGER.info("Found recipes: {}", this.recipes);
-            if (!this.recipes.isEmpty()) {
+            SimpleContainer tempContainer = new SimpleContainer(2);
+            tempContainer.setItem(0, stack1);
+            tempContainer.setItem(1, stack2);
 
-                this.selectedRecipeIndex.set(0);
+            this.recipes = this.level.getRecipeManager()
+                    .getRecipesFor(ModRecipes.SEWING.get(), container, this.level);
 
+            // Debug log: Print the number of recipes found
+            TutorialMod.LOGGER.info("Found {} recipes for inputs: {} and {}",
+                    this.recipes.size(), stack1.getItem(), stack2.getItem());
+
+            // Debug log: Print each recipe's result
+            for (SewingRecipe recipe : this.recipes) {
+                TutorialMod.LOGGER.info("Recipe result: {}", recipe.getResultItem(this.level.registryAccess()).getItem());
             }
 
-
-        } else {
-            TutorialMod.LOGGER.info("Input slots are empty");
+            if (!this.recipes.isEmpty()) {
+                this.selectedRecipeIndex.set(0);
+                this.setupResultSlot();
+            }
         }
 
         this.broadcastChanges();
-        this.setupResultSlot();
     }
+
 
 
 

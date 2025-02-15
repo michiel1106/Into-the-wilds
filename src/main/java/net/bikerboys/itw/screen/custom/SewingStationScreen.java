@@ -1,4 +1,4 @@
-package net.bikerboys.itw.screen;
+package net.bikerboys.itw.screen.custom;
 
 import net.bikerboys.itw.TutorialMod;
 import net.bikerboys.itw.recipes.SewingRecipe;
@@ -11,9 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SewingStationScreen extends AbstractContainerScreen<SewingStationMenu> {
     private static final ResourceLocation BG_LOCATION = new ResourceLocation(TutorialMod.MOD_ID, "textures/gui/sewing_station.png");
@@ -92,19 +92,24 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
     }
 
     private void renderRecipes(GuiGraphics pGuiGraphics, int pX, int pY, int pStartIndex) {
-        List<SewingRecipe> list = this.menu.getRecipes();
+        List<SewingRecipe> list = this.menu.getRecipes().stream().toList();
+        TutorialMod.LOGGER.info("Rendering {} recipes", list.size());
 
-        for (int i = this.startIndex; i < pStartIndex && i < this.menu.getNumRecipes(); ++i) {
+        for (int i = this.startIndex; i < pStartIndex && i < list.size(); ++i) {
             int j = i - this.startIndex;
             int k = pX + j % 4 * 16;
             int l = j / 4;
             int i1 = pY + l * 18 + 2;
-            TutorialMod.LOGGER.info("renderingrecipes");
-            assert Objects.requireNonNull(this.minecraft).level != null;
-            assert this.minecraft.level != null;
-            pGuiGraphics.renderItem(list.get(i).getResultItem(this.minecraft.level.registryAccess()), k, i1);
+
+            if (this.minecraft != null && this.minecraft.level != null) {
+                ItemStack result = list.get(i).getResultItem(this.minecraft.level.registryAccess());
+                pGuiGraphics.renderItem(result, k, i1);
+                pGuiGraphics.renderItemDecorations(this.font, result, k, i1);
+            }
         }
     }
+
+
 
 
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
@@ -165,21 +170,30 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
     }
 
     private boolean isScrollBarActive() {
-        return this.displayRecipes && this.menu.getNumRecipes() > 12;
+        int numRecipes = this.menu.getNumRecipes();
+        TutorialMod.LOGGER.info("Checking scrollbar: {} recipes", numRecipes);
+        return this.displayRecipes && numRecipes > 4; // Show scrollbar if more than 4 recipes
     }
 
     protected int getOffscreenRows() {
-        return (this.menu.getNumRecipes() + 4 - 1) / 4 - 3;
+        int numRecipes = this.menu.getNumRecipes();
+        return Math.max(0, (numRecipes + 3) / 4 - 3);
     }
+
 
 
     private void containerChanged() {
         this.displayRecipes = this.menu.hasInputItem();
-        if (!this.displayRecipes) {
+        TutorialMod.LOGGER.info("Container changed - displayRecipes: {}", this.displayRecipes);
+
+        if (this.displayRecipes) {
+            this.startIndex = Math.max(0, Math.min(this.startIndex, this.menu.getNumRecipes() - 12));
+        } else {
             this.scrollOffs = 0.0F;
             this.startIndex = 0;
         }
-
     }
+
+
 }
 

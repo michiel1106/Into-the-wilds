@@ -4,10 +4,13 @@ import com.mojang.logging.LogUtils;
 import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
 import net.bikerboys.itw.item.ModItems;
+import net.bikerboys.itw.recipes.ModRecipes;
 import net.bikerboys.itw.recipes.SewingRecipe;
 import net.bikerboys.itw.screen.ModMenuTypes;
-import net.bikerboys.itw.screen.SewingStationMenu;
-import net.bikerboys.itw.screen.SewingStationScreen;
+import net.bikerboys.itw.screen.custom.SewingStationMenu;
+import net.bikerboys.itw.screen.custom.SewingStationScreen;
+import net.bikerboys.itw.screen.secondone.SecondSewingStationMenu;
+import net.bikerboys.itw.screen.secondone.SecondSewingStationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.inventory.MenuType;
@@ -26,9 +29,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
-import static net.bikerboys.itw.recipes.ModRecipes.RECIPE_SERIALIZERS;
-import static net.bikerboys.itw.recipes.ModRecipes.RECIPE_TYPES;
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TutorialMod.MOD_ID)
 public class TutorialMod
@@ -45,8 +45,8 @@ public class TutorialMod
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
 
-        RECIPE_TYPES.register(modEventBus);
-        RECIPE_SERIALIZERS.register(modEventBus);
+        ModRecipes.register(modEventBus);
+
         TutorialMod.LOGGER.info("Registered recipe type: {}", SewingRecipe.Type.ID);
         TutorialMod.LOGGER.info("Registered recipe serializer: {}", SewingRecipe.Serializer.ID);
         ModMenuTypes.register(modEventBus);
@@ -100,6 +100,11 @@ public class TutorialMod
             MenuScreens.register(
                     (MenuType<SewingStationMenu>)(MenuType<?>) ModMenuTypes.SEWING_STATION_MENU.get(),
                     SewingStationScreen::new
+            );
+
+            MenuScreens.register(
+                    (MenuType<SecondSewingStationMenu>)(MenuType<?>) ModMenuTypes.SECOND_SEWING_STATION_MENU.get(),
+                    SecondSewingStationScreen::new
             );
            // MenuScreens.register(ModMenuTypes.SEWING_STATION_MENU.get(), SewingStationScreen::new);
             // Some client setup code

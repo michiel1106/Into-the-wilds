@@ -1,7 +1,6 @@
 package net.bikerboys.itw.block.entity;
 
-import net.bikerboys.itw.item.ModItems;
-import net.bikerboys.itw.screen.SewingStationMenu;
+import net.bikerboys.itw.screen.custom.SewingStationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,9 +15,9 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -48,7 +47,7 @@ public class SewingStationBlockEntity extends BlockEntity implements MenuProvide
 
 
     public SewingStationBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.SEWING_STATION_BE.get(), pPos, pBlockState);
+        super(BlockEntityType.BARREL, pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
@@ -160,18 +159,17 @@ public class SewingStationBlockEntity extends BlockEntity implements MenuProvide
     }
 
     private void craftItem() {
-        ItemStack result = new ItemStack(ModItems.TEST_HELMET.get(), 1);
+
         this.itemHandler.extractItem(INPUT_SLOT, 1, false);
 
-        this.itemHandler.setStackInSlot(OUTPUT_SLOT,new ItemStack(result.getItem(), this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));
+        //this.itemHandler.setStackInSlot(OUTPUT_SLOT,new ItemStack(result.getItem(), this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));
         
     }
 
     private boolean hasRecipe() {
-        boolean hasCraftingItem = this.itemHandler.getStackInSlot(INPUT_SLOT).getItem() == ModItems.TEST_BOOTS.get();
-        ItemStack result = new ItemStack(ModItems.TEST_BOOTS.get());
 
-        return  hasCraftingItem && canInsertAmountIntoOutputSlot(result.getCount()) && canInsertItemIntoOutputSlot(result.getItem());
+
+        return  true;
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {
