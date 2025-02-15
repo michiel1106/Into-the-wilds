@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
 import net.bikerboys.itw.item.ModItems;
+import net.bikerboys.itw.recipes.SewingRecipe;
 import net.bikerboys.itw.screen.ModMenuTypes;
 import net.bikerboys.itw.screen.SewingStationMenu;
 import net.bikerboys.itw.screen.SewingStationScreen;
@@ -25,6 +26,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import static net.bikerboys.itw.recipes.ModRecipes.RECIPE_SERIALIZERS;
+import static net.bikerboys.itw.recipes.ModRecipes.RECIPE_TYPES;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TutorialMod.MOD_ID)
 public class TutorialMod
@@ -32,7 +36,7 @@ public class TutorialMod
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "itw";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public TutorialMod()
     {
@@ -40,6 +44,11 @@ public class TutorialMod
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        // In your constructor or setup method:
+        RECIPE_TYPES.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
+        TutorialMod.LOGGER.info("Registered recipe type: {}", SewingRecipe.Type.ID);
+        TutorialMod.LOGGER.info("Registered recipe serializer: {}", SewingRecipe.Serializer.ID);
         ModMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 

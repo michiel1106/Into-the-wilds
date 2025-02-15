@@ -1,5 +1,7 @@
 package net.bikerboys.itw.screen;
 
+import net.bikerboys.itw.TutorialMod;
+import net.bikerboys.itw.recipes.SewingRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,12 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.crafting.StonecutterRecipe;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SewingStationScreen extends AbstractContainerScreen<SewingStationMenu> {
-    private static final ResourceLocation BG_LOCATION = new ResourceLocation("minecraft", "textures/gui/container/stonecutter.png");
+    private static final ResourceLocation BG_LOCATION = new ResourceLocation(TutorialMod.MOD_ID, "textures/gui/sewing_station.png");
 
 
     private static final int SCROLLER_WIDTH = 12;
@@ -51,12 +53,13 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
     }
 
+
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         this.renderBackground(pGuiGraphics);
         int i = this.leftPos;
         int j = this.topPos;
         pGuiGraphics.blit(BG_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        int k = (int)(41.0F * this.scrollOffs);
+        int k = (int) (41.0F * this.scrollOffs);
         pGuiGraphics.blit(BG_LOCATION, i + 119, j + 15 + k, 176 + (this.isScrollBarActive() ? 0 : 12), 0, 12, 15);
         int l = this.leftPos + 52;
         int i1 = this.topPos + 14;
@@ -68,10 +71,11 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
     protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
         super.renderTooltip(pGuiGraphics, pX, pY);
         if (this.displayRecipes) {
+            TutorialMod.LOGGER.info("render tooltip");
             int i = this.leftPos + 52;
             int j = this.topPos + 14;
             int k = this.startIndex + 12;
-            List<StonecutterRecipe> list = this.menu.getRecipes();
+            List<SewingRecipe> list = this.menu.getRecipes();
 
             for(int l = this.startIndex; l < k && l < this.menu.getNumRecipes(); ++l) {
                 int i1 = l - this.startIndex;
@@ -86,7 +90,8 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
     }
 
     private void renderButtons(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, int pX, int pY, int pLastVisibleElementIndex) {
-        for(int i = this.startIndex; i < pLastVisibleElementIndex && i < this.menu.getNumRecipes(); ++i) {
+        for (int i = this.startIndex; i < pLastVisibleElementIndex && i < this.menu.getNumRecipes(); ++i) {
+            TutorialMod.LOGGER.info("renderbuttons");
             int j = i - this.startIndex;
             int k = pX + j % 4 * 16;
             int l = j / 4;
@@ -100,33 +105,27 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
 
             pGuiGraphics.blit(BG_LOCATION, k, i1 - 1, 0, j1, 16, 18);
         }
-
     }
 
     private void renderRecipes(GuiGraphics pGuiGraphics, int pX, int pY, int pStartIndex) {
-        List<StonecutterRecipe> list = this.menu.getRecipes();
+        List<SewingRecipe> list = this.menu.getRecipes();
 
-        for(int i = this.startIndex; i < pStartIndex && i < this.menu.getNumRecipes(); ++i) {
+        for (int i = this.startIndex; i < pStartIndex && i < this.menu.getNumRecipes(); ++i) {
             int j = i - this.startIndex;
             int k = pX + j % 4 * 16;
             int l = j / 4;
             int i1 = pY + l * 18 + 2;
+            TutorialMod.LOGGER.info("renderingrecipes");
+            assert Objects.requireNonNull(this.minecraft).level != null;
+            assert this.minecraft.level != null;
             pGuiGraphics.renderItem(list.get(i).getResultItem(this.minecraft.level.registryAccess()), k, i1);
         }
-
     }
 
-    /**
-     * Called when a mouse button is clicked within the GUI element.
-     * <p>
-     * @return {@code true} if the event is consumed, {@code false} otherwise.
-     * @param pMouseX the X coordinate of the mouse.
-     * @param pMouseY the Y coordinate of the mouse.
-     * @param pButton the button that was clicked.
-     */
+
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         this.scrolling = false;
-        if (this.displayRecipes) {
+     //   if (this.displayRecipes) {
             int i = this.leftPos + 52;
             int j = this.topPos + 14;
             int k = this.startIndex + 12;
@@ -147,10 +146,12 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
             if (pMouseX >= (double)i && pMouseX < (double)(i + 12) && pMouseY >= (double)j && pMouseY < (double)(j + 54)) {
                 this.scrolling = true;
             }
-        }
+    //    }
 
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
+
+
 
     /**
      * Called when the mouse is dragged within the GUI element.
@@ -183,12 +184,13 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
      * @param pMouseY the Y coordinate of the mouse.
      * @param pDelta the scrolling delta.
      */
+
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
         if (this.isScrollBarActive()) {
             int i = this.getOffscreenRows();
-            float f = (float)pDelta / (float)i;
+            float f = (float) pDelta / (float) i;
             this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-            this.startIndex = (int)((double)(this.scrollOffs * (float)i) + 0.5D) * 4;
+            this.startIndex = (int) ((double) (this.scrollOffs * (float) i) + 0.5D) * 4;
         }
 
         return true;

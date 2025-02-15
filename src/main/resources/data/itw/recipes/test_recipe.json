@@ -1,0 +1,11 @@
+{
+  "type": "itw:itw_sewing",
+  "ingredients": [
+    { "item": "minecraft:coal" },
+    { "item": "minecraft:iron_ingot" }
+  ],
+  "output": {
+    "item": "minecraft:diamond",
+    "count": 1
+  }
+}
