@@ -26,8 +26,7 @@ public class SewingRecipe implements Recipe<Container> {
     }
 
 
-    //   private final Ingredient input1;
-  //  private final Ingredient input2;
+
 
 
 

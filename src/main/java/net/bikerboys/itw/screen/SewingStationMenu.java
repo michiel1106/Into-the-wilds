@@ -19,15 +19,8 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class SewingStationMenu extends AbstractContainerMenu {
-    public static final int INPUT_SLOT = 0;
-    public static final int INPUT_SLOT2 = 1;
-    public static final int RESULT_SLOT = 2;
-    private static final int INV_SLOT_START = 2;
-    private static final int INV_SLOT_END = 29;
-    private static final int USE_ROW_SLOT_START = 29;
-    private static final int USE_ROW_SLOT_END = 38;
     private final ContainerLevelAccess access;
-    /** The index of the selected recipe in the GUI. */
+
     private final DataSlot selectedRecipeIndex = DataSlot.standalone();
     private final Level level;
     private List<SewingRecipe> recipes = Lists.newArrayList();
@@ -42,7 +35,7 @@ public class SewingStationMenu extends AbstractContainerMenu {
 
     Runnable slotUpdateListener = () -> {
     };
-   // final Container container = new SimpleContainer(2);
+
 
    public final Container container = new SimpleContainer(3) {
 
@@ -76,7 +69,7 @@ public class SewingStationMenu extends AbstractContainerMenu {
                 stack.onCraftedBy(player.level(), player, stack.getCount());
                 SewingStationMenu.this.resultContainer.awardUsedRecipes(player, this.getRelevantItems());
 
-                // Decrease the count for BOTH input slots
+
                 SewingStationMenu.this.inputSlot.remove(1);
                 SewingStationMenu.this.secondInputSlot.remove(1);
 
@@ -120,7 +113,7 @@ public class SewingStationMenu extends AbstractContainerMenu {
     }
 
     public List<SewingRecipe> getRecipes() {
-        //TutorialMod.LOGGER.info("getrecipes: {}", this.recipes);
+
         return this.recipes;
     }
 
@@ -180,14 +173,14 @@ public class SewingStationMenu extends AbstractContainerMenu {
                 this.selectedRecipeIndex.set(0);
 
             }
-            // Automatically select the first recipe if there are results
+
 
         } else {
             TutorialMod.LOGGER.info("Input slots are empty");
         }
 
         this.broadcastChanges();
-        this.setupResultSlot(); // <-- Add this line to trigger result update
+        this.setupResultSlot();
     }
 
 

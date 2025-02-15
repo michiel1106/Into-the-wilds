@@ -19,15 +19,6 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
     private static final ResourceLocation BG_LOCATION = new ResourceLocation(TutorialMod.MOD_ID, "textures/gui/sewing_station.png");
 
 
-    private static final int SCROLLER_WIDTH = 12;
-    private static final int SCROLLER_HEIGHT = 15;
-    private static final int RECIPES_COLUMNS = 4;
-    private static final int RECIPES_ROWS = 3;
-    private static final int RECIPES_IMAGE_SIZE_WIDTH = 16;
-    private static final int RECIPES_IMAGE_SIZE_HEIGHT = 18;
-    private static final int SCROLLER_FULL_HEIGHT = 54;
-    private static final int RECIPES_X = 52;
-    private static final int RECIPES_Y = 14;
     private float scrollOffs;
 
     private boolean scrolling;
@@ -41,13 +32,6 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
         --this.titleLabelY;
     }
 
-    /**
-     * Renders the graphical user interface (GUI) element.
-     * @param pGuiGraphics the GuiGraphics object used for rendering.
-     * @param pMouseX the x-coordinate of the mouse cursor.
-     * @param pMouseY the y-coordinate of the mouse cursor.
-     * @param pPartialTick the partial tick time.
-     */
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
@@ -125,7 +109,7 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
 
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         this.scrolling = false;
-     //   if (this.displayRecipes) {
+        if (this.displayRecipes) {
             int i = this.leftPos + 52;
             int j = this.topPos + 14;
             int k = this.startIndex + 12;
@@ -146,23 +130,14 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
             if (pMouseX >= (double)i && pMouseX < (double)(i + 12) && pMouseY >= (double)j && pMouseY < (double)(j + 54)) {
                 this.scrolling = true;
             }
-    //    }
+        }
 
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
 
 
-    /**
-     * Called when the mouse is dragged within the GUI element.
-     * <p>
-     * @return {@code true} if the event is consumed, {@code false} otherwise.
-     * @param pMouseX the X coordinate of the mouse.
-     * @param pMouseY the Y coordinate of the mouse.
-     * @param pButton the button that is being dragged.
-     * @param pDragX the X distance of the drag.
-     * @param pDragY the Y distance of the drag.
-     */
+
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         if (this.scrolling && this.isScrollBarActive()) {
             int i = this.topPos + 14;
@@ -176,14 +151,7 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
         }
     }
 
-    /**
-     * Called when the mouse wheel is scrolled within the GUI element.
-     * <p>
-     * @return {@code true} if the event is consumed, {@code false} otherwise.
-     * @param pMouseX the X coordinate of the mouse.
-     * @param pMouseY the Y coordinate of the mouse.
-     * @param pDelta the scrolling delta.
-     */
+
 
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
         if (this.isScrollBarActive()) {
@@ -204,9 +172,7 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
         return (this.menu.getNumRecipes() + 4 - 1) / 4 - 3;
     }
 
-    /**
-     * Called every time this screen's container is changed (is marked as dirty).
-     */
+
     private void containerChanged() {
         this.displayRecipes = this.menu.hasInputItem();
         if (!this.displayRecipes) {

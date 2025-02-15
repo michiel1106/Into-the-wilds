@@ -20,13 +20,13 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID);
 
-    // Register the RecipeType
+
     public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_TYPE = RECIPE_TYPES.register(
-            SewingRecipe.Type.ID, // "itw_sewing"
+            SewingRecipe.Type.ID,
             () -> SewingRecipe.Type.INSTANCE
     );
 
-    // Register the RecipeSerializer
+
     public static final RegistryObject<RecipeSerializer<?>> SEWING_SERIALIZER = RECIPE_SERIALIZERS.register(
             SewingRecipe.Type.ID, // "itw_sewing"
             () -> SewingRecipe.Serializer.INSTANCE
