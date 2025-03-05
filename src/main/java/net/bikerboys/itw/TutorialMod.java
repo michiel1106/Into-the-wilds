@@ -3,6 +3,7 @@ package net.bikerboys.itw;
 import com.mojang.logging.LogUtils;
 import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
+import net.bikerboys.itw.curios.MyCurioRenderer;
 import net.bikerboys.itw.item.ModItems;
 import net.bikerboys.itw.recipes.ModRecipes;
 import net.bikerboys.itw.recipes.SewingRecipe;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TutorialMod.MOD_ID)
@@ -52,7 +54,8 @@ public class TutorialMod
         ModMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
-
+        final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.addListener(this::clientSetup);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -60,6 +63,10 @@ public class TutorialMod
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
+    }
+
+    private void clientSetup(final FMLClientSetupEvent evt) {
+        CuriosRendererRegistry.register(ModItems.MASK.get(), MyCurioRenderer::new);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

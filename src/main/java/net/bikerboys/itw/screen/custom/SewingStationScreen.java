@@ -40,6 +40,7 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
 
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         this.renderBackground(pGuiGraphics);
+       // TutorialMod.LOGGER.info("renderbg");
         int i = this.leftPos;
         int j = this.topPos;
         pGuiGraphics.blit(BG_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
@@ -93,7 +94,8 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
 
     private void renderRecipes(GuiGraphics pGuiGraphics, int pX, int pY, int pStartIndex) {
         List<SewingRecipe> list = this.menu.getRecipes().stream().toList();
-        TutorialMod.LOGGER.info("Rendering {} recipes", list.size());
+      //  TutorialMod.LOGGER.info("Rendering {} recipes", list.size());
+
 
         for (int i = this.startIndex; i < pStartIndex && i < list.size(); ++i) {
             int j = i - this.startIndex;
@@ -171,7 +173,7 @@ public class SewingStationScreen extends AbstractContainerScreen<SewingStationMe
 
     private boolean isScrollBarActive() {
         int numRecipes = this.menu.getNumRecipes();
-        TutorialMod.LOGGER.info("Checking scrollbar: {} recipes", numRecipes);
+      //  TutorialMod.LOGGER.info("Checking scrollbar: {} recipes", numRecipes);
         return this.displayRecipes && numRecipes > 4; // Show scrollbar if more than 4 recipes
     }
 

@@ -1,114 +1,124 @@
 package net.bikerboys.itw.recipes;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.bikerboys.itw.TutorialMod;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
-
 public class SecondSewingRecipe implements Recipe<Container> {
-    private final NonNullList<Ingredient> inputItems;
-    private final ItemStack output;
-    private final ResourceLocation id;
+    protected final Ingredient ingredient;
+    protected final ItemStack result;
+    private final RecipeType<?> type;
+    private final RecipeSerializer<?> serializer;
+    protected final ResourceLocation id;
+    protected final String group;
 
-    public SecondSewingRecipe(NonNullList<Ingredient> inputItems, ItemStack output, ResourceLocation id) {
-        this.inputItems = inputItems;
-        this.output = output;
-        this.id = id;
+    public SecondSewingRecipe(RecipeType<?> pType, RecipeSerializer<?> pSerializer, ResourceLocation pId, String pGroup, Ingredient pIngredient, ItemStack pResult) {
+        this.type = pType;
+        this.serializer = pSerializer;
+        this.id = pId;
+        this.group = pGroup;
+        this.ingredient = pIngredient;
+        this.result = pResult;
     }
 
-    @Override
-    public boolean matches(Container pContainer, Level pLevel) {
-        if(pLevel.isClientSide()) {
-            return false;
-        }
-
-        return inputItems.get(0).test(pContainer.getItem(0));
+    public RecipeType<?> getType() {
+        return this.type;
     }
 
-    @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
-        return output.copy();
+    public RecipeSerializer<?> getSerializer() {
+        return this.serializer;
     }
 
-    @Override
+    public ResourceLocation getId() {
+        return this.id;
+    }
+
+    /**
+     * Recipes with equal group are combined into one button in the recipe book
+     */
+    public String getGroup() {
+        return this.group;
+    }
+
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+        return this.result;
+    }
+
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> nonnulllist = NonNullList.create();
+        nonnulllist.add(this.ingredient);
+        return nonnulllist;
+    }
+
+    /**
+     * Used to determine if this recipe can fit in a grid of the given width/height
+     */
     public boolean canCraftInDimensions(int pWidth, int pHeight) {
         return true;
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return output.copy();
+    public boolean matches(Container pContainer, Level pLevel) {
+        return this.ingredient.test(pContainer.getItem(0));
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return Type.INSTANCE;
+    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+        return this.result.copy();
     }
 
     public static class Type implements RecipeType<SecondSewingRecipe> {
-        public static final Type INSTANCE = new Type();
+        public static final SecondSewingRecipe.Type INSTANCE = new SecondSewingRecipe.Type();
         public static final String ID = "itw_sewing_second";
     }
 
-    public static class Serializer implements RecipeSerializer<SecondSewingRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID = new ResourceLocation(TutorialMod.MOD_ID, "itw_sewing_second");
+    public static class Serializer<T extends SecondSewingRecipe> implements RecipeSerializer<T> {
+        final SecondSewingRecipe.Serializer.SingleItemMaker<T> factory;
 
-        @Override
-        public SecondSewingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
-
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(1, Ingredient.EMPTY);
-
-            for(int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
-            }
-
-            return new SecondSewingRecipe(inputs, output, pRecipeId);
+        protected Serializer(SecondSewingRecipe.Serializer.SingleItemMaker pFactory) {
+            this.factory = pFactory;
         }
 
-        @Override
-        public @Nullable SecondSewingRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
-
-            for(int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(pBuffer));
+        public T fromJson(ResourceLocation pRecipeId, JsonObject pJson) {
+            String s = GsonHelper.getAsString(pJson, "group", "");
+            Ingredient ingredient;
+            if (GsonHelper.isArrayNode(pJson, "ingredient")) {
+                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonArray(pJson, "ingredient"), false);
+            } else {
+                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(pJson, "ingredient"), false);
             }
 
-            ItemStack output = pBuffer.readItem();
-            return new SecondSewingRecipe(inputs, output, pRecipeId);
+            String s1 = GsonHelper.getAsString(pJson, "result");
+            int i = GsonHelper.getAsInt(pJson, "count");
+            ItemStack itemstack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(s1)), i);
+            return this.factory.create(pRecipeId, s, ingredient, itemstack);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, SecondSewingRecipe pRecipe) {
-            pBuffer.writeInt(pRecipe.inputItems.size());
+        public T fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+            String s = pBuffer.readUtf();
+            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
+            ItemStack itemstack = pBuffer.readItem();
+            return this.factory.create(pRecipeId, s, ingredient, itemstack);
+        }
 
-            for (Ingredient ingredient : pRecipe.getIngredients()) {
-                ingredient.toNetwork(pBuffer);
-            }
+        public void toNetwork(FriendlyByteBuf pBuffer, T pRecipe) {
+            pBuffer.writeUtf(pRecipe.group);
+            pRecipe.ingredient.toNetwork(pBuffer);
+            pBuffer.writeItem(pRecipe.result);
+        }
 
-            pBuffer.writeItemStack(pRecipe.getResultItem(null), false);
+        interface SingleItemMaker<T extends SecondSewingRecipe> {
+            T create(ResourceLocation pId, String pGroup, Ingredient pIngredient, ItemStack pResult);
         }
     }
 }

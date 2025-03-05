@@ -30,8 +30,8 @@ public class ModRecipes {
     public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_SERIALIZER =
             SERIALIZERS.register("itw_sewing", () -> SewingRecipe.Serializer.INSTANCE);
 
-    public static final RegistryObject<RecipeSerializer<SecondSewingRecipe>> SECOND_SEWING_SERIALIZER =
-            SERIALIZERS.register("itw_sewing_second", () -> SecondSewingRecipe.Serializer.INSTANCE);
+  //  public static final RegistryObject<RecipeSerializer<SecondSewingRecipe>> SECOND_SEWING_SERIALIZER =
+   //         SERIALIZERS.register("itw_sewing_second", () -> SecondSewingRecipe.Serializer);
 
 
     public static void register(IEventBus eventBus) {

@@ -58,7 +58,7 @@ public class SewingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        TutorialMod.LOGGER.info("sewingecipe getresultitem: " + output.copy());
+
         return output.copy();
     }
 
