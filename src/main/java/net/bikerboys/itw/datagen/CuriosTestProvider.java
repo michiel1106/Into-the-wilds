@@ -20,8 +20,9 @@ public class CuriosTestProvider extends CuriosDataProvider {
 
         this.createSlot("ring");
         this.createSlot("head").useNativeGui(true);
+        this.createSlot("chest");
 
-        this.createEntities("test").addSlots("ring", "head").addPlayer();
+        this.createEntities("test").addSlots("ring", "head", "chest").addPlayer();
         //this.createEntities("itw_slot").addPlayer().addSlots("ring");
     }
 }

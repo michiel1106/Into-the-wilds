@@ -3,10 +3,10 @@ package net.bikerboys.itw;
 import com.mojang.logging.LogUtils;
 import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
-import net.bikerboys.itw.curios.MyCurioRenderer;
 import net.bikerboys.itw.item.ModItems;
 import net.bikerboys.itw.recipes.ModRecipes;
 import net.bikerboys.itw.recipes.SewingRecipe;
+import net.bikerboys.itw.render.ArmorCurioRenderer;
 import net.bikerboys.itw.screen.ModMenuTypes;
 import net.bikerboys.itw.screen.custom.SewingStationMenu;
 import net.bikerboys.itw.screen.custom.SewingStationScreen;
@@ -14,6 +14,7 @@ import net.bikerboys.itw.screen.secondone.SecondSewingStationMenu;
 import net.bikerboys.itw.screen.secondone.SecondSewingStationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -66,7 +67,10 @@ public class TutorialMod
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
-        CuriosRendererRegistry.register(ModItems.MASK.get(), MyCurioRenderer::new);
+
+        CuriosRendererRegistry.register(
+                ModItems.MASK.get(), () -> new ArmorCurioRenderer(new ResourceLocation("minecraft", "textures/models/armor/leathers_layer_1.png"))
+        );
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
