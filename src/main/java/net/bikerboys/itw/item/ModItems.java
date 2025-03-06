@@ -20,6 +20,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> MASK = ITEMS.register("black_mask", () -> new ArmorItem(ModMaterial.LEATHERS, ArmorItem.Type.HELMET, new Item.Properties()));
 
+    public static final RegistryObject<Item> JEANS = ITEMS.register("jeans", () -> new ArmorItem(ModMaterial.JEANS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

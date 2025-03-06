@@ -10,7 +10,7 @@ public class ArmorTextures {
     private static final Map<Item, ResourceLocation> TEXTURES = new HashMap<>();
 
     public static void register(Item item, String texturePath) {
-        TEXTURES.put(item, new ResourceLocation("itw", texturePath));
+        TEXTURES.put(item, new ResourceLocation("tailory", texturePath));
     }
 
     public static ResourceLocation getTexture(Item item) {

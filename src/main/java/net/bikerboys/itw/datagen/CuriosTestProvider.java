@@ -19,10 +19,11 @@ public class CuriosTestProvider extends CuriosDataProvider {
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
 
         this.createSlot("ring");
-        this.createSlot("head").useNativeGui(true);
+        this.createSlot("head");
         this.createSlot("chest");
+        this.createSlot("legs");
 
-        this.createEntities("test").addSlots("ring", "head", "chest").addPlayer();
+        this.createEntities("test").addSlots("ring", "head", "chest", "legs").addPlayer();
         //this.createEntities("itw_slot").addPlayer().addSlots("ring");
     }
 }

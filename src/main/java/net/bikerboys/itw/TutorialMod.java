@@ -5,7 +5,6 @@ import net.bikerboys.itw.block.ModBlocks;
 import net.bikerboys.itw.block.entity.ModBlockEntities;
 import net.bikerboys.itw.item.ModItems;
 import net.bikerboys.itw.recipes.ModRecipes;
-import net.bikerboys.itw.recipes.SewingRecipe;
 import net.bikerboys.itw.render.ArmorCurioRenderer;
 import net.bikerboys.itw.screen.ModMenuTypes;
 import net.bikerboys.itw.screen.custom.SewingStationMenu;
@@ -37,7 +36,7 @@ import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 public class TutorialMod
 {
 
-    public static final String MOD_ID = "itw";
+    public static final String MOD_ID = "tailory";
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -50,8 +49,6 @@ public class TutorialMod
 
         ModRecipes.register(modEventBus);
 
-        TutorialMod.LOGGER.info("Registered recipe type: {}", SewingRecipe.Type.ID);
-        TutorialMod.LOGGER.info("Registered recipe serializer: {}", SewingRecipe.Serializer.ID);
         ModMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
@@ -68,15 +65,16 @@ public class TutorialMod
 
     private void clientSetup(final FMLClientSetupEvent evt) {
 
-        CuriosRendererRegistry.register(
-                ModItems.MASK.get(), () -> new ArmorCurioRenderer(new ResourceLocation("minecraft", "textures/models/armor/leathers_layer_1.png"))
-        );
+        CuriosRendererRegistry.register(ModItems.MASK.get(), () -> new ArmorCurioRenderer(new ResourceLocation("minecraft", "textures/models/armor/leathers_layer_1.png")));
+        CuriosRendererRegistry.register(ModItems.JEANS.get(), () -> new ArmorCurioRenderer(new ResourceLocation("minecraft", "textures/models/armor/jeans_layer_2.png")));
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
 
     }
+
+
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
